@@ -1,9 +1,14 @@
 import axios from 'axios';
 
 const TOPHUB_API = 'https://api.tophubdata.com';
-const API_KEY = process.env.TOPHUB_API_KEY; // 你等等設在 Vercel 環境變數裡
+const API_KEY = process.env.TOPHUB_API_KEY;
 
-const KEYWORDS = ['皮革', '高定', '沙发', '家具', '软装', '设计', '家饰', '意式', '全青', '全粒面'];
+const KEYWORDS = [
+  '皮革', '高定家具', '高定沙发', '家具', '皮沙发', '软装', '设计',
+  '全青皮', '牛皮', '苯染皮', '半苯染', '修面涂料', '半青皮', '苯胺', '半苯胺'
+];
+
+const TARGET_PLATFORMS = ['微博', '视频号', '公众号', '小红书', '抖音', '知乎'];
 
 export default async function handler(req, res) {
   try {
@@ -12,9 +17,8 @@ export default async function handler(req, res) {
     });
 
     const nodes = nodesRes.data.data;
-    const targetPlatforms = ['微博', '知乎', '小红书', '抖音', '视频号', '公众号'];
     const hashids = nodes
-      .filter(n => targetPlatforms.includes(n.name))
+      .filter(n => TARGET_PLATFORMS.includes(n.name))
       .map(n => ({ name: n.name, hashid: n.hashid }));
 
     let allItems = [];
